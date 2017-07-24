@@ -1,0 +1,396 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="attendanceModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Attendance">
+          <Key>
+            <PropertyRef Name="AttId" />
+          </Key>
+          <Property Name="AttId" Type="int" Nullable="false" />
+          <Property Name="AttPresents" Type="int" Nullable="false" />
+          <Property Name="AttAbsents" Type="int" Nullable="false" />
+          <Property Name="StuId" Type="int" Nullable="false" />
+          <Property Name="CouId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AttendanceHistory">
+          <Key>
+            <PropertyRef Name="HisId" />
+          </Key>
+          <Property Name="HisId" Type="int" Nullable="false" />
+          <Property Name="HisDateTime" Type="datetime" Nullable="false" />
+          <Property Name="HisIsPresent" Type="bit" Nullable="false" />
+          <Property Name="AttId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Course">
+          <Key>
+            <PropertyRef Name="CouId" />
+          </Key>
+          <Property Name="CouId" Type="int" Nullable="false" />
+          <Property Name="CouName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TeaId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CourseStudent">
+          <Key>
+            <PropertyRef Name="StuId" />
+            <PropertyRef Name="CourseId" />
+          </Key>
+          <Property Name="StuId" Type="int" Nullable="false" />
+          <Property Name="CourseId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="StuId" />
+          </Key>
+          <Property Name="StuId" Type="int" Nullable="false" />
+          <Property Name="StuName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="StuRollNo" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Teacher">
+          <Key>
+            <PropertyRef Name="TeaId" />
+          </Key>
+          <Property Name="TeaId" Type="int" Nullable="false" />
+          <Property Name="TeaUsername" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TeaPassword" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TeaFirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TeaLastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TeaEmail" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TeaContactNo" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Attendance_ToTable_Attendance_1">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="Attendance" Type="Self.Attendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StuId" />
+            </Principal>
+            <Dependent Role="Attendance">
+              <PropertyRef Name="StuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Attendance_ToTable_Attendance_2">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="Attendance" Type="Self.Attendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CouId" />
+            </Principal>
+            <Dependent Role="Attendance">
+              <PropertyRef Name="CouId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AttendanceHistory_ToTable">
+          <End Role="Attendance" Type="Self.Attendance" Multiplicity="1" />
+          <End Role="AttendanceHistory" Type="Self.AttendanceHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attendance">
+              <PropertyRef Name="AttId" />
+            </Principal>
+            <Dependent Role="AttendanceHistory">
+              <PropertyRef Name="AttId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Course_ToBidge">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="CourseStudent" Type="Self.CourseStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CouId" />
+            </Principal>
+            <Dependent Role="CourseStudent">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Course_ToTable_Course">
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="TeaId" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="TeaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Student_ToBidge">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="CourseStudent" Type="Self.CourseStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StuId" />
+            </Principal>
+            <Dependent Role="CourseStudent">
+              <PropertyRef Name="StuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="attendanceModelStoreContainer">
+          <EntitySet Name="Attendance" EntityType="Self.Attendance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AttendanceHistory" EntityType="Self.AttendanceHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Course" EntityType="Self.Course" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CourseStudent" EntityType="Self.CourseStudent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Attendance_ToTable_Attendance_1" Association="Self.FK_Attendance_ToTable_Attendance_1">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="Attendance" EntitySet="Attendance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Attendance_ToTable_Attendance_2" Association="Self.FK_Attendance_ToTable_Attendance_2">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="Attendance" EntitySet="Attendance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AttendanceHistory_ToTable" Association="Self.FK_AttendanceHistory_ToTable">
+            <End Role="Attendance" EntitySet="Attendance" />
+            <End Role="AttendanceHistory" EntitySet="AttendanceHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Course_ToBidge" Association="Self.FK_Course_ToBidge">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="CourseStudent" EntitySet="CourseStudent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Course_ToTable_Course" Association="Self.FK_Course_ToTable_Course">
+            <End Role="Teacher" EntitySet="Teacher" />
+            <End Role="Course" EntitySet="Course" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Student_ToBidge" Association="Self.FK_Student_ToBidge">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="CourseStudent" EntitySet="CourseStudent" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="attendanceModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Attendance">
+          <Key>
+            <PropertyRef Name="AttId" />
+          </Key>
+          <Property Name="AttId" Type="Int32" Nullable="false" />
+          <Property Name="AttPresents" Type="Int32" Nullable="false" />
+          <Property Name="AttAbsents" Type="Int32" Nullable="false" />
+          <Property Name="StuId" Type="Int32" Nullable="false" />
+          <Property Name="CouId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Student" Relationship="Self.FK_Attendance_ToTable_Attendance_1" FromRole="Attendance" ToRole="Student" />
+          <NavigationProperty Name="Course" Relationship="Self.FK_Attendance_ToTable_Attendance_2" FromRole="Attendance" ToRole="Course" />
+          <NavigationProperty Name="AttendanceHistories" Relationship="Self.FK_AttendanceHistory_ToTable" FromRole="Attendance" ToRole="AttendanceHistory" />
+        </EntityType>
+        <EntityType Name="AttendanceHistory">
+          <Key>
+            <PropertyRef Name="HisId" />
+          </Key>
+          <Property Name="HisId" Type="Int32" Nullable="false" />
+          <Property Name="HisDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="HisIsPresent" Type="Boolean" Nullable="false" />
+          <Property Name="AttId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Attendance" Relationship="Self.FK_AttendanceHistory_ToTable" FromRole="AttendanceHistory" ToRole="Attendance" />
+        </EntityType>
+        <EntityType Name="Course">
+          <Key>
+            <PropertyRef Name="CouId" />
+          </Key>
+          <Property Name="CouId" Type="Int32" Nullable="false" />
+          <Property Name="CouName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TeaId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Attendances" Relationship="Self.FK_Attendance_ToTable_Attendance_2" FromRole="Course" ToRole="Attendance" />
+          <NavigationProperty Name="Teacher" Relationship="Self.FK_Course_ToTable_Course" FromRole="Course" ToRole="Teacher" />
+          <NavigationProperty Name="Students" Relationship="attendanceModel.CourseStudent" FromRole="Course" ToRole="Student" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="StuId" />
+          </Key>
+          <Property Name="StuId" Type="Int32" Nullable="false" />
+          <Property Name="StuName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="StuRollNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Attendances" Relationship="Self.FK_Attendance_ToTable_Attendance_1" FromRole="Student" ToRole="Attendance" />
+          <NavigationProperty Name="Courses" Relationship="attendanceModel.CourseStudent" FromRole="Student" ToRole="Course" />
+        </EntityType>
+        <EntityType Name="Teacher">
+          <Key>
+            <PropertyRef Name="TeaId" />
+          </Key>
+          <Property Name="TeaId" Type="Int32" Nullable="false" />
+          <Property Name="TeaUsername" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TeaPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TeaFirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TeaLastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TeaEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TeaContactNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Courses" Relationship="Self.FK_Course_ToTable_Course" FromRole="Teacher" ToRole="Course" />
+        </EntityType>
+        <Association Name="FK_Attendance_ToTable_Attendance_1">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="Attendance" Type="Self.Attendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="StuId" />
+            </Principal>
+            <Dependent Role="Attendance">
+              <PropertyRef Name="StuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Attendance_ToTable_Attendance_2">
+          <End Role="Course" Type="Self.Course" Multiplicity="1" />
+          <End Role="Attendance" Type="Self.Attendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CouId" />
+            </Principal>
+            <Dependent Role="Attendance">
+              <PropertyRef Name="CouId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AttendanceHistory_ToTable">
+          <End Role="Attendance" Type="Self.Attendance" Multiplicity="1" />
+          <End Role="AttendanceHistory" Type="Self.AttendanceHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attendance">
+              <PropertyRef Name="AttId" />
+            </Principal>
+            <Dependent Role="AttendanceHistory">
+              <PropertyRef Name="AttId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Course_ToTable_Course">
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="TeaId" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="TeaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="attendanceEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Attendances" EntityType="Self.Attendance" />
+          <EntitySet Name="AttendanceHistories" EntityType="Self.AttendanceHistory" />
+          <EntitySet Name="Courses" EntityType="Self.Course" />
+          <EntitySet Name="Students" EntityType="Self.Student" />
+          <EntitySet Name="Teachers" EntityType="Self.Teacher" />
+          <AssociationSet Name="FK_Attendance_ToTable_Attendance_1" Association="Self.FK_Attendance_ToTable_Attendance_1">
+            <End Role="Student" EntitySet="Students" />
+            <End Role="Attendance" EntitySet="Attendances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Attendance_ToTable_Attendance_2" Association="Self.FK_Attendance_ToTable_Attendance_2">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="Attendance" EntitySet="Attendances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AttendanceHistory_ToTable" Association="Self.FK_AttendanceHistory_ToTable">
+            <End Role="Attendance" EntitySet="Attendances" />
+            <End Role="AttendanceHistory" EntitySet="AttendanceHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Course_ToTable_Course" Association="Self.FK_Course_ToTable_Course">
+            <End Role="Teacher" EntitySet="Teachers" />
+            <End Role="Course" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="CourseStudent" Association="attendanceModel.CourseStudent">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="Student" EntitySet="Students" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="CourseStudent">
+          <End Type="attendanceModel.Course" Role="Course" Multiplicity="*" />
+          <End Type="attendanceModel.Student" Role="Student" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="attendanceModelStoreContainer" CdmEntityContainer="attendanceEntities">
+          <EntitySetMapping Name="Attendances">
+            <EntityTypeMapping TypeName="attendanceModel.Attendance">
+              <MappingFragment StoreEntitySet="Attendance">
+                <ScalarProperty Name="AttId" ColumnName="AttId" />
+                <ScalarProperty Name="AttPresents" ColumnName="AttPresents" />
+                <ScalarProperty Name="AttAbsents" ColumnName="AttAbsents" />
+                <ScalarProperty Name="StuId" ColumnName="StuId" />
+                <ScalarProperty Name="CouId" ColumnName="CouId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AttendanceHistories">
+            <EntityTypeMapping TypeName="attendanceModel.AttendanceHistory">
+              <MappingFragment StoreEntitySet="AttendanceHistory">
+                <ScalarProperty Name="HisId" ColumnName="HisId" />
+                <ScalarProperty Name="HisDateTime" ColumnName="HisDateTime" />
+                <ScalarProperty Name="HisIsPresent" ColumnName="HisIsPresent" />
+                <ScalarProperty Name="AttId" ColumnName="AttId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Courses">
+            <EntityTypeMapping TypeName="attendanceModel.Course">
+              <MappingFragment StoreEntitySet="Course">
+                <ScalarProperty Name="CouId" ColumnName="CouId" />
+                <ScalarProperty Name="CouName" ColumnName="CouName" />
+                <ScalarProperty Name="TeaId" ColumnName="TeaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Students">
+            <EntityTypeMapping TypeName="attendanceModel.Student">
+              <MappingFragment StoreEntitySet="Student">
+                <ScalarProperty Name="StuId" ColumnName="StuId" />
+                <ScalarProperty Name="StuName" ColumnName="StuName" />
+                <ScalarProperty Name="StuRollNo" ColumnName="StuRollNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Teachers">
+            <EntityTypeMapping TypeName="attendanceModel.Teacher">
+              <MappingFragment StoreEntitySet="Teacher">
+                <ScalarProperty Name="TeaId" ColumnName="TeaId" />
+                <ScalarProperty Name="TeaUsername" ColumnName="TeaUsername" />
+                <ScalarProperty Name="TeaPassword" ColumnName="TeaPassword" />
+                <ScalarProperty Name="TeaFirstName" ColumnName="TeaFirstName" />
+                <ScalarProperty Name="TeaLastName" ColumnName="TeaLastName" />
+                <ScalarProperty Name="TeaEmail" ColumnName="TeaEmail" />
+                <ScalarProperty Name="TeaContactNo" ColumnName="TeaContactNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="CourseStudent" TypeName="attendanceModel.CourseStudent" StoreEntitySet="CourseStudent">
+            <EndProperty Name="Student">
+              <ScalarProperty Name="StuId" ColumnName="StuId" />
+            </EndProperty>
+            <EndProperty Name="Course">
+              <ScalarProperty Name="CouId" ColumnName="CourseId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,28 @@
+﻿@model FINAL.Course
+
+    @*@Html.BeginForm("Save", "Attendance", FormMethod.Post);*@
+<div class="container">
+    <h2>Mark Attendance</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>RollNumber</th>
+                <th>Present</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Students.Count; i++)
+            {
+                <tr>
+                    <td>@Html.DisplayTextFor(m => m.Students.ElementAt(i).StuName)</td>
+                    <td>@Html.DisplayTextFor(m => m.Students.ElementAt(i).StuRollNo)</td>
+                    <td><input id="sruId_@i" type="checkbox" class="checkbox" value="Present" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<input type="submit" value="Save" class="btn-primary col-lg-offset-11" />
+   

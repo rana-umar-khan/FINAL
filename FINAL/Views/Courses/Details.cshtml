@@ -1,0 +1,34 @@
+﻿@model FINAL.Course
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Course</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CouName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CouName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Teacher.TeaUsername)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Teacher.TeaUsername)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CouId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
